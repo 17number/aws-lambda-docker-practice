@@ -64,3 +64,29 @@ $ aws lambda create-function \
 
 
 ### Node.js
+
+Build
+
+```bash
+$ cd nodejs
+$ docker build -t aws-lambda-nodejs10.x-test .
+```
+
+Create deploy package
+
+```bash
+$ docker run --rm -v "$PWD":/var/task aws-lambda-nodejs10.x-test:latest
+```
+
+Deploy with [`aws-cli`](https://github.com/aws/aws-cli)
+
+```bash
+$ aws lambda create-function \
+  --function-name docker-lambda-nodejs-test \
+  --zip-file fileb://deploy_package.zip \
+  --handler index.handler \
+  --runtime nodejs10.x \
+  --timeout 10 \
+  --memory-size 1024 \
+  --role arn:aws:iam::123456789012:role/lambda-execute-role
+```
