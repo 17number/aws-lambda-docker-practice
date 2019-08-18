@@ -34,6 +34,33 @@ $ docker run --rm -v "$PWD":/var/task lambci/lambda:nodejs10.x function.handler 
 
 ### Ruby
 
+Build
+
+```bash
+$ cd ruby
+$ docker build -t aws-lambda-ruby2.5-test .
+```
+
+Create deploy package
+
+```bash
+$ docker run --rm -v "$PWD":/var/task aws-lambda-ruby2.5-test:latest
+```
+
+Deploy with [`aws-cli`](https://github.com/aws/aws-cli)
+
+```bash
+$ aws lambda create-function \
+  --function-name docker-lambda-ruby-test \
+  --zip-file fileb://deploy_package.zip \
+  --handler lambda_function.handler \
+  --runtime ruby2.5 \
+  --timeout 10 \
+  --memory-size 1024 \
+  --role arn:aws:iam::123456789012:role/lambda-execute-role
+```
+
+
 ### Python
 
 Build
